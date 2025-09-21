@@ -1,0 +1,56 @@
+:: StoryCaption [util, noevent, nobr]
+<<nobr>>
+    /* 'nochar' 태그가 없는 패시지에서만 캐릭터 외형 창과 추가 버튼을 표시합니다. */
+    <<if not tags().includes('nochar')>>
+
+        <div id="char-portrait">
+            캐릭터 외형 표시 영역
+        </div>
+
+        <<if not tags().includes('chargen')>>
+            <div id="extra-buttons">
+                <div class="ui-button-row">
+                    <<button "캐릭터 정보">>
+                        /* 캐릭터 정보 다이얼로그 여는 기능 (나중에 추가) */
+                    <</button>>
+                </div>
+                <div class="ui-button-row">
+                    <<button "인벤토리">>
+                        /* 인벤토리 다이얼로그 여는 기능 (나중에 추가) */
+                    <</button>>
+                    <<button "다이어리">>
+                        /* 다이어리 다이얼로그 여는 기능 (나중에 추가) */
+                    <</button>>
+                </div>
+                <div class="ui-button-row">
+                    <<button "인간관계">>
+                        /* 인간관계 다이얼로그 여는 기능 (나중에 추가) */
+                    <</button>>
+                    <<button "지도">>
+                        /* 지도 다이얼로그 여는 기능 (나중에 추가) */
+                    <</button>>
+                </div>
+            </div>
+        <</if>>
+
+    <</if>>
+
+    <div id="base-buttons">
+        <div class="ui-button-row">
+            <<button "통계">>
+                /* 통계 다이얼로그 여는 기능 (나중에 추가) */
+            <</button>>
+            <<button "도움말">>
+                /* 도움말 다이얼로그 여는 기능 (나중에 추가) */
+            <</button>>
+        </div>
+        <div class="ui-button-row">
+            <<button "게임 설정">>
+                /* 게임 설정 다이얼로그 여는 기능 (나중에 추가) */
+            <</button>>
+            <<button "저장/불러오기">>
+                /* 저장/불러오기 다이얼로그 여는 기능 (나중에 추가) */
+            <</button>>
+        </div>
+    </div>
+<</nobr>>

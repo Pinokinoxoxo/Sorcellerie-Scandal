@@ -1,0 +1,221 @@
+:: M:DormFront [M OUTSIDE]
+/* 남자 기숙사 건물 앞 */
+<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())>>
+
+<<if previous() === "F:DormFront">>
+당신은 남자 기숙사 건물 앞에 도착했다.
+<<elseif _fromInside>>
+당신은 남자 기숙사 밖으로 나왔다.
+<<else>>
+당신은 남자 기숙사 건물 앞에 서 있다.
+<</if>>
+
+- [[남자 기숙사로 들어간다->M:CommonRoom]]
+- [[여자 기숙사 앞으로 간다->F:DormFront]]
+
+:: F:DormFront [F OUTSIDE]
+/* 여자 기숙사 건물 앞 */
+<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())>>
+
+<<if previous() === "M:DormFront">>
+당신은 여자 기숙사 건물 앞에 도착했다.
+<<elseif _fromInside>>
+	<<if $homeDorm === "M">>
+당신은 여자 기숙사 밖으로 나왔다.
+	<<else>>
+당신은 기숙사 밖으로 나왔다.
+	<</if>>
+<<else>>
+당신은 여자 기숙사 건물 앞에 서 있다.
+<</if>>
+
+- [[여자 기숙사로 들어간다->F:CommonRoom]]
+- [[남자 기숙사 앞으로 간다->M:DormFront]]
+
+/* ─────────────────────────────
+   남자 기숙사 내부
+   ───────────────────────────── */
+
+:: M:CommonRoom [M FLOOR:1]
+남자 기숙사 라운지다.
+<<if previous() is "M:DormFront">>문을 밀고 안으로 들어왔다.<</if>>
+
+벽난로와 편한 의자들이 보인다. 책장이 한쪽 벽을 채우고 있다.
+- [[책장->Bookshelf]]
+- [[1층 복도->M:Corridor1]]
+- [[2층 복도->M:Corridor2]]
+- [[기숙사 밖으로 나간다->M:DormFront]]
+
+:: M:Corridor1 [M FLOOR:1]
+<<if previous() is "M:CommonRoom">>
+라운지에서 1층 복도로 내려왔다.
+<<else>>
+남자 기숙사 1층 복도다.
+<</if>>
+양옆으로 방들이 늘어서 있고, 황동 명판이 달려 있다.
+- [[화장실->M:Restroom1]]
+- [[세면장->M:Washroom1]]
+- [[라운지->M:CommonRoom]]
+
+/* 내 방 링크: 내 홈이 남자기숙사 + 1층 복도일 때만 노출 */
+<<if $homeDorm is "M">>
+- [[당신의 방->PlayerDorm]]
+<</if>>
+
+:: M:Corridor2 [M FLOOR:2]
+남자 기숙사 2층 복도다.
+- [[화장실->M:Restroom2]]
+- [[세면장->M:Washroom2]]
+- [[라운지->M:CommonRoom]]
+
+:: M:Restroom1 [M FLOOR:1]
+남자 기숙사 1층 화장실이다.
+- [[복도로 나간다->M:Corridor1]]
+
+:: M:Restroom2 [M FLOOR:2]
+남자 기숙사 2층 화장실이다.
+- [[복도로 나간다->M:Corridor2]]
+
+:: M:Washroom1 [M FLOOR:1]
+남자 기숙사 1층 세면장이다.
+- [[탈의실->M:Changing1]]
+- [[복도로 나간다->M:Corridor1]]
+
+:: M:Changing1 [M FLOOR:1]
+남자 기숙사 1층 탈의실이다.
+- [[샤워장->M:Shower1]]
+- [[복도로 나간다->M:Corridor1]]
+
+:: M:Shower1 [M FLOOR:1]
+남자 기숙사 1층 샤워장이다.
+- [[탈의실로 돌아간다->M:Changing1]]
+- [[복도로 나간다->M:Corridor1]]
+
+:: M:Washroom2 [M FLOOR:2]
+남자 기숙사 2층 세면장이다.
+- [[탈의실->M:Changing2]]
+- [[복도로 나간다->M:Corridor2]]
+
+:: M:Changing2 [M FLOOR:2]
+남자 기숙사 2층 탈의실이다.
+- [[샤워장->M:Shower2]]
+- [[복도로 나간다->M:Corridor2]]
+
+:: M:Shower2 [M FLOOR:2]
+남자 기숙사 2층 샤워장이다.
+- [[탈의실로 돌아간다->M:Changing2]]
+- [[복도로 나간다->M:Corridor2]]
+
+/* ─────────────────────────────
+   여자 기숙사 내부
+   ───────────────────────────── */
+
+:: F:CommonRoom [F FLOOR:1]
+여자 기숙사 라운지다.
+<<if previous() is "F:FroDormFrontnt">>문을 밀고 안으로 들어왔다.<</if>>
+
+벽난로와 편한 의자들이 보인다. 책장이 한쪽 벽을 채우고 있다.
+- [[책장->Bookshelf]]
+- [[1층 복도->F:Corridor1]]
+- [[2층 복도->F:Corridor2]]
+- [[기숙사 밖으로 나간다->F:DormFront]]
+
+:: F:Corridor1 [F FLOOR:1]
+<<if previous() is "F:CommonRoom">>
+라운지에서 1층 복도로 내려왔다.
+<<else>>
+여자 기숙사 1층 복도다.
+<</if>>
+양옆으로 방들이 늘어서 있고, 황동 명판이 달려 있다.
+- [[화장실->F:Restroom1]]
+- [[세면장->F:Washroom1]]
+- [[라운지->F:CommonRoom]]
+
+/* 내 방 링크: 내 홈이 여자기숙사 + 1층 복도일 때만 노출 */
+<<if $homeDorm is "F">>
+- [[당신의 방->PlayerRoom]]
+<</if>>
+
+:: F:Corridor2 [F FLOOR:2]
+여자 기숙사 2층 복도다.
+- [[화장실->F:Restroom2]]
+- [[세면장->F:Washroom2]]
+- [[라운지->F:CommonRoom]]
+
+:: F:Restroom1 [F FLOOR:1]
+여자 기숙사 1층 화장실이다.
+- [[복도로 나간다->F:Corridor1]]
+
+:: F:Restroom2 [F FLOOR:2]
+여자 기숙사 2층 화장실이다.
+- [[복도로 나간다->F:Corridor2]]
+
+:: F:Washroom1 [F FLOOR:1]
+여자 기숙사 1층 세면장이다.
+- [[탈의실->F:Changing1]]
+- [[복도로 나간다->F:Corridor1]]
+
+:: F:Changing1 [F FLOOR:1]
+여자 기숙사 1층 탈의실이다.
+- [[샤워장->F:Shower1]]
+- [[복도로 나간다->F:Corridor1]]
+
+:: F:Shower1 [F FLOOR:1]
+여자 기숙사 1층 샤워장이다.
+- [[탈의실로 돌아간다->F:Changing1]]
+- [[복도로 나간다->F:Corridor1]]
+
+:: F:Washroom2 [F FLOOR:2]
+여자 기숙사 2층 세면장이다.
+- [[탈의실->F:Changing2]]
+- [[복도로 나간다->F:Corridor2]]
+
+:: F:Changing2 [F FLOOR:2]
+여자 기숙사 2층 탈의실이다.
+- [[샤워장->F:Shower2]]
+- [[복도로 나간다->F:Corridor2]]
+
+:: F:Shower2 [F FLOOR:2]
+여자 기숙사 2층 샤워장이다.
+- [[탈의실로 돌아간다->F:Changing2]]
+- [[복도로 나간다->F:Corridor2]]
+
+/* ─────────────────────────────
+   공용: 책장, 플레이어 방, 침대
+   ───────────────────────────── */
+
+:: Bookshelf
+여러 장르의 책들이 꽂혀 있다.
+<<if previous() matches "M:CommonRoom|F:CommonRoom">>
+- [[라운지로 돌아간다->%+previous()]]
+<<else>>
+- [[뒤로->M:CommonRoom]]
+- [[뒤로->F:CommonRoom]]
+<</if>>
+
+:: PlayerRoom [HOME FLOOR:1]
+/* 동적 목적지: 내 홈 기숙사 1층 복도 */
+<<set _homeCorr = ($homeDorm is "M") ? "M:Corridor1" : "F:Corridor1">>
+
+/* 가드: 바로 이전이 내 홈 기숙사 1층 복도에서 온 경우만 정상 입장 */
+<<if ($homeDorm is "M" and previous() is "M:Corridor1") or ($homeDorm is "F" and previous() is "F:Corridor1")>>
+	<<if previous() matches "(M|F):Corridor1">>
+당신은 기숙사 방 안으로 들어왔다.
+	<</if>>
+- [[침대에 눕는다->OnBed]]
+- <<link "방 밖으로 나간다">><<goto _homeCorr>><</link>>
+
+<<elseif previous() is "OnBed">>
+당신은 침대에서 일어났다. 당신은 기숙사 방 안에 있다.
+- <<link "방 밖으로 나간다">><<goto _homeCorr>><</link>>
+- [[다시 눕는다->OnBed]]
+
+<<else>>
+이 건물에는 당신의 방이 없다.
+- <<link "돌아가기">><<goto previous()>><</link>>
+<</if>>
+
+:: OnBed
+당신은 지금 침대 위에 누워 있다.
+- [[일어나기->PlayerRoom]]
+

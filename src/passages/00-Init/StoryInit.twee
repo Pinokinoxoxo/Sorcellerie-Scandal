@@ -1,0 +1,27 @@
+:: StoryInit
+<<run console.log("Init: checking browser version for idb")>>
+<<if Browser.isMobile.iOS>>
+    <<set idb.active to false>>
+<</if>>
+
+/* initialize date/time */
+<<set $day to 1>>
+<<set $month to 3>>
+<<set $hour to 8>>
+<<set $minute to 0>>
+<<set $year to 1890>>
+<<set $gameday to 1>>
+<<set $gameyear to 1>>
+
+/* initialize stuff about the PC (much of this can be almost immediately changed in chargen) */
+<<run console.log("Init: set default character data")>>
+
+<<set $pcmoney to 500>>
+
+<<set $admitChoice to 0>>
+<<set $tuitionOff to 0>>
+
+<<set $bgChoice to 0>>
+<<set $bgFinalKey to "">>
+
+<<set $varsversion to 0>>

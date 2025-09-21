@@ -1,0 +1,8 @@
+:: StoryDisplayTitle
+Scandal Sorcellerie
+
+:: StoryTitle
+Scandal Sorcellerie
+
+:: StoryBanner [nobr, noevent]
+<div id="title-container" style="display: inline-block;"><img src="assets/images/logo.png" style="width: 45%; overflow: auto; overflow-clip-margin:"></div>

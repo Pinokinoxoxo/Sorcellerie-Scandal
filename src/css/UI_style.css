@@ -1,0 +1,149 @@
+/* ============================================================================
+ * 4_uistyle.css (수정본)
+ * - [수정] UI Bar 관련 스타일 및 레이아웃 조정 로직 통합
+ * ========================================================================== */
+:root {
+  --ui-bar-width: 18.5rem;  /* 사이드바 실제 폭 */
+  --ui-bar-peek: 2rem;      /* 접힘 상태에서 보이는 손잡이 폭 */
+  --ui-bar-gutter: 1rem;    /* 본문과 사이드바 사이 여백 */
+}
+
+/* 사이드바 실제 폭/접힘 오프셋을 변수로 통일 */
+#ui-bar {
+  width: var(--ui-bar-width) !important;
+}
+
+/* 접힘(stowed)일 때 왼쪽으로 밀어넣되 손잡이(peek)만큼은 남김 */
+#ui-bar.stowed {
+  left: calc(var(--ui-bar-peek) - var(--ui-bar-width)) !important;
+}
+
+#story-title,
+#story-author,
+#menu {
+    display: none;
+}
+
+/* UI 바 내부 콘텐츠 영역 */
+#ui-bar-body {
+    margin-top: 0.5em;
+    height: 98%;
+    padding: 0 0.8em !important;
+    display: flex;
+    flex-flow: column nowrap; /* 콘텐츠를 세로로 정렬 */
+    overflow-y: auto;    
+}
+
+#ui-bar-body::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
+}
+
+/* 뒤로/앞으로 가기 버튼 위치 및 크기 조정 */
+#ui-bar-history {
+    -webkit-transform: scale(0.75);
+    transform: scale(0.75);
+}
+#ui-bar-tray {
+    position: absolute;
+    left: 8em !important;
+    z-index: 999;
+}
+#ui-bar-history [id|=history]:not(:first-child) {
+    margin-left: 0 !important;
+}
+
+/* 캐릭터 외형 표시 영역의 기본 스타일 */
+#char-portrait {
+  border: 2px solid #666;
+  background-color: #222;
+  padding: 10px;
+  text-align: center;
+  color: #999;
+  min-height: 150px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+/* UI 버튼 행의 레이아웃 (Flexbox 사용) */
+.ui-button-row {
+  display: flex;
+  justify-content: space-between; /* 버튼 사이 간격 균등 배분 */
+  gap: 5px; /* 버튼 사이의 최소 간격 */
+  margin-bottom: 5px;
+}
+
+/* UI 버튼 행 안의 버튼 스타일 */
+.ui-button-row button {
+  flex: 1; /* 모든 버튼이 행의 공간을 균등하게 차지 */
+  margin: 0;
+  padding: 8px 5px;
+  font-size: 0.9em;
+}
+
+[data-passage="StoryBanner"] {
+    position: fixed; /* 화면을 기준으로 위치를 고정 */
+    top: 0;          /* 화면 맨 위에서 0px 떨어진 곳에 위치 */
+    left: 0;         /* 화면 왼쪽에서 0px 떨어진 곳에 위치 */
+    width: 100%;     /* 너비를 화면 전체로 설정 */
+    z-index: 1000;   /* 다른 UI 요소들보다 위에 표시되도록 설정 (숫자가 높을수록 위) */
+
+    /* 내부 로고를 보기 좋게 꾸미기 (선택 사항) */
+    background-color: #686566; /* 사이드바와 비슷한 배경색으로 통일감 부여 */
+    padding: 0.5em 0 0;          /* 위아래 여백 추가 */
+    text-align: center;      /* 내부 요소를 가운데 정렬 */
+    border-bottom: 1px solid #c5c5c5; /* 하단 테두리 추가 */
+}
+
+/* 중요: 상단 배너가 본문을 가리는 현상 방지 */
+#passages {
+    /* 배너의 높이만큼 본문 시작 위치를 아래로 내리기 */
+    margin-top: 5em; /* 이 값은 배너 높이에 맞춰 직접 조절해야 할 수 있습니다 */
+}
+
+/* ================================================================
+   UI Bar 상태에 따른 메인 레이아웃 조정 (수정본)
+================================================================ */
+
+/* 1. #story의 기본 스타일 정의 */
+body:not([data-tags~="game-title"]) #story {
+    transition: margin-left 0.4s ease-in-out, padding-left 0.4s ease-in-out;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body[data-tags~="game-title"] #story {
+    max-width: none !important;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* 2. body의 padding에 전환 효과 */
+body:not([data-tags~="game-title"]) {
+    transition: padding-left 0.4s ease-in-out;
+}
+
+@media screen and (min-width: 481px) {
+  /* 열림: 사이드바 폭 + 여백(gutter)만큼 본문 밀기 */
+  body.ui-bar-open:not([data-tags~="game-title"]) {
+    padding-left: calc(var(--ui-bar-width) + var(--ui-bar-gutter));
+  }
+  /* 접힘: 손잡이(peek)만큼만 밀어 본문이 손잡이와 겹치지 않게 */
+  body.ui-bar-closed:not([data-tags~="game-title"]) {
+    padding-left: var(--ui-bar-peek);
+  }
+}
+
+/* 모바일(480px↓)은 기존처럼 오버레이 처리 */
+@media screen and (max-width: 480px) {
+  body.ui-bar-open:not([data-tags~="game-title"]) { padding-left: 0; }
+  body.ui-bar-open:not([data-tags~="game-title"]) #story::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+  }
+}

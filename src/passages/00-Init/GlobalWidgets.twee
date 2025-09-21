@@ -1,0 +1,30 @@
+:: StartWidgets
+
+
+:: WidgetGenericChoiceCard [widget]
+<<widget "genericChoiceCard">>
+<<nobr>>
+    <<<set _data to _args[0]>>
+    <<set _isSelected to _args[1]>>
+    <<set _hasPick to _args[2]>>
+    
+    <div @class="'choice-section' + (_isSelected ? ' selected' : (_hasPick ? ' unselected' : ''))">>
+        <div class="choice-header">
+            <h3><<= _data.title>></h3>
+            <span class="choice-action">
+                <<if _isSelected>>
+                    <span class="btn is-disabled" aria-disabled="true">✓ 선택됨</span>
+                <<else>>
+                    @;<<print _args[3]>>
+                <</if>>
+            </span>
+        </div>
+        <div class="choice-content">
+            <p><<= _data.desc>></p>
+            <<if _data.fx && _data.fx.length>>
+                <p class="choice-effects"><<= setup.renderEffects(_data.fx)>></p>
+            <</if>>
+        </div>
+    </div>
+<</nobr>>
+<</widget>>

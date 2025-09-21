@@ -1,0 +1,18 @@
+﻿:: WorldGen
+<<nobr>><div class="nav-section">
+  <div class="nav-left">
+    <span class="default-button">
+      <<button "뒤로가기">><<goto "Start2">><</button>>
+    </span>
+  </div>
+
+  <div class="nav-center">
+    <div class="box"></div>
+  </div>
+
+  <div class="nav-right">
+    <span class="default-button">
+      <<button "설정 적용">><<goto "Start2">><</button>>
+    </span>
+  </div>
+</div><</nobr>>

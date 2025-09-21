@@ -1,0 +1,521 @@
+/* ============================================================================
+ * 3_style.css
+ * ========================================================================== */
+
+/* --- 0) Tokens ----------------------------------------------------------- */
+:root{
+  /* Brand palette (임의 톤) */
+  --brand: #5a4a8b;
+  --brand-hover: #4e417a;
+  --accent: #8b4a5a;
+  --accent-hover: #7a414f;
+  --muted: #6b6b6b;
+
+  /* Paper / panel / state */
+  --paper-brd: #f7e4be;   /* ← rgb(247,228,190) 토큰화 */
+  --panel-bg: #303030;
+  --danger: #ff0000;
+
+  /* Surfaces / text */
+  --bg: #1d1d1d;
+  --surface: #262626;
+  --surface-2: #202020;
+  --text: #e8e6e3;
+  --text-dim: #ffffff;
+  --brd: #3b3b3b;
+
+  /* Radii / shadow */
+  --radius-s: 10px;
+  --radius-m: 12px;
+  --shadow-1: 0 6px 16px rgba(0,0,0,.25);
+
+  /* Timetable course fallback color */
+  --course-default: #5a9bd5;
+
+  /* (선택) 과목별 예시 토큰 — 필요 시 확장 사용 */
+  --course-arts: #d57aa0;
+  --course-life: #6ec09c;
+  --course-social: #f1b15f;
+  --course-major: #7a9bd5;
+
+  /* Focus outline */
+  --focus: #c7bfa9;
+
+  /* ✅ Button baseline (높이 통일 토큰) */
+  --btn-h: 38px;          /* 모든 버튼 높이 통일 */
+  --btn-px: 16px;         /* 좌우 패딩 */
+}
+
+/* --- 1) Base / Resets --------------------------------------------------- */
+html,body{ background:var(--bg); color:var(--text); }
+*, *::before, *::after{ box-sizing:border-box; }
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+small, .small{ font-size:.9em; opacity:.9; }
+.muted{ color:var(--text-dim); }
+.error-text{ color:#ff7575; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+
+/* Focus ring (키보드 접근성) */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+.tabs__btn:focus-visible,
+.btn:focus-visible{
+  outline:2px solid var(--focus);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* --- 2) Buttons (통합) -------------------------------------------------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h);                       /* ✅ 높이 고정 */
+  padding:0 var(--btn-px);                   /* ✅ 수직패딩 0, 좌우만 */
+  white-space:nowrap;                        /* 줄바꿈 방지 */
+  border-radius:var(--radius-s);
+  font-size:1em;
+  line-height:1;                             /* ✅ 라인하이트 통일 */
+  min-width:80px;
+  text-align:center;
+  text-decoration:none;
+  box-sizing:border-box;
+  cursor:pointer;
+  user-select:none;
+}
+.btn--brand{
+  background:var(--brand); color:#fff;
+  border:1px solid color-mix(in oklab, var(--brand), #000 20%);
+  transition:background-color .25s ease;
+}
+.btn--brand:hover{ background:var(--brand-hover); }
+.btn--accent{
+  background:var(--accent); color:#fff;
+  border:1px solid color-mix(in oklab, var(--accent), #000 20%);
+  transition:background-color .25s ease;
+}
+.btn--accent:hover{ background:var(--accent-hover); }
+
+/* ✅ 비활성 버튼 룩 (span.btn.is-disabled, button[disabled], aria-disabled 지원) */
+.btn.is-disabled,
+.btn[aria-disabled="true"],
+.btn:disabled{
+  background:var(--muted);
+  color:#fff;
+  border:1px solid color-mix(in oklab, var(--muted), #000 20%);
+  opacity:.65;
+  cursor:default;
+  pointer-events:none;
+}
+
+/* SugarCube 기본 버튼 감싸기: .default-button 내 button도 같은 높이/룩 */
+.default-button button{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h); padding:0 var(--btn-px);
+  white-space:nowrap; line-height:1; box-sizing:border-box;
+  background:var(--brand); color:#fff;
+  border:1px solid color-mix(in oklab, var(--brand), #000 20%);
+  border-radius:var(--radius-s); cursor:pointer;
+  transition:background-color .25s ease;
+}
+.default-button button:hover{ background:var(--brand-hover); }
+
+/* 래퍼 자체가 비활성인 경우(.default-button.disabled / [aria-disabled="true"]) */
+.default-button.disabled,
+.default-button[aria-disabled="true"]{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h); padding:0 var(--btn-px);
+  white-space:nowrap; line-height:1; box-sizing:border-box;
+  background:var(--muted);
+  color:#fff;
+  border-radius:var(--radius-s);
+  opacity:.65;
+  cursor:default;
+  pointer-events:none;
+  user-select:none;
+  border:1px solid color-mix(in oklab, var(--muted), #000 20%);
+}
+
+/* 래퍼가 비활성일 때 내부 버튼/링크가 있어도 상호작용 차단 & 스타일 상속 */
+.default-button.disabled > *,
+.default-button[aria-disabled="true"] > *{
+  background:transparent !important;
+  border:0 !important;
+  color:inherit !important;
+  pointer-events:none !important;
+}
+
+/* --- 3) Tabs (Start7/Start8 공통 컴포넌트) ------------------------------ */
+.tabs{
+  display:flex; gap:6px; padding-left:2px;
+  border-bottom:2px solid var(--paper-brd);
+  margin:10px 0 12px;
+}
+.tabs__btn{
+  background:#373421; color:#fff;
+  border:1px solid var(--paper-brd);
+  border-radius:10px 10px 0 0; border-bottom:none;
+  padding:10px 16px; font-size:15px; line-height:1.2;
+  cursor:pointer; transition:all .25s ease;
+}
+.tabs__btn:hover{ background:#4b4835; }
+.tabs__btn.is-active{ background:#73626e; position:relative; z-index:1; }
+
+/* 탭 패널은 hidden 속성으로만 제어 (중복 로직 제거) */
+.tab-panel[hidden]{ display:none !important; }
+
+/* 구(舊) 클래스 호환: .tab-btn → .tabs__btn 룩 앤 필 상속 */
+.tab-btn{
+  background:#373421; color:#fff;
+  border:1px solid var(--paper-brd);
+  border-radius:10px 10px 0 0; border-bottom:none;
+  padding:10px 16px; font-size:15px; line-height:1.2;
+  cursor:pointer; transition:all .25s ease;
+}
+.tab-btn.active{ background:#73626e; position:relative; z-index:1; }
+
+/* --- 4) Choice Grid & Cards -------------------------------------------- */
+.choice-grid{
+  display:grid; gap:16px; margin:10px 0;
+  grid-template-columns:repeat(var(--cols,1), minmax(0,1fr));
+}
+@media (max-width:980px){ .choice-grid[data-responsive~="3->2"]{ --cols:2; } }
+@media (max-width:640px){ .choice-grid{ --cols:1; } }
+
+.choice-section{
+  background:var(--surface);
+  border:1px solid var(--brd);
+  border-radius:var(--radius-m);
+  box-shadow:var(--shadow-1);
+  padding:14px;
+  transition:box-shadow .2s ease;
+}
+.choice-section:hover{ box-shadow:0 8px 24px rgba(0,0,0,.28); }
+
+.choice-section.selected{
+  border-color:var(--paper-brd);
+  background:color-mix(in oklab, var(--surface), var(--paper-brd) 8%);
+}
+.choice-section.unselected{
+  border-color:var(--brd);
+  opacity:.96;
+}
+.choice-header{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin-bottom:6px;
+}
+.choice-header h3{ margin:0; font-size:1.2em; }
+.choice-action{ display:flex; align-items:center; gap:8px; }
+
+/* ✅ “선택됨”을 버튼처럼 표시 (비활성 룩 & 동일 높이) */
+.choice-action .disabled,
+.change-choice .disabled{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h); padding:0 var(--btn-px);
+  white-space:nowrap; line-height:1; box-sizing:border-box;
+  border-radius:var(--radius-s);
+  background:var(--muted);
+  color:#fff;
+  border:1px solid color-mix(in oklab, var(--muted), #000 20%);
+  opacity:.65;
+  cursor:default;
+  pointer-events:none;
+}
+
+/* 기존 앵커 기반 버튼도 동일 높이로 강제 */
+.choice-action a,
+.change-choice a{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h); padding:0 var(--btn-px);
+  white-space:nowrap; line-height:1; box-sizing:border-box;
+  border-radius:var(--radius-s);
+  background:var(--accent); color:#fff; transition:background-color .25s ease;
+}
+.choice-action a:hover,
+.change-choice a:hover{ background:var(--accent-hover); }
+
+.choice-content p{ margin:.4rem 0; }
+.choice-effects{ font-size:.95em; color:var(--text-dim); }
+
+/* --- 5) Split / Double grid (폼 열 배치 통일) -------------------------- */
+.split{
+  display:flex; gap:0; border:2px solid var(--paper-brd);
+}
+.split__left, .split__right{ padding:10px; box-sizing:border-box; }
+.split__left{ border:1px solid #373421; padding-top:8px; }
+.split__right{ background:var(--panel-bg); border-radius:10px; }
+
+/* 비율 프리셋 */
+.split[data-left="12"] .split__left  { width:12%; }
+.split[data-left="12"] .split__right { width:88%; }
+.split[data-left="23"] .split__left  { width:23%; }
+.split[data-left="23"] .split__right { width:77%; }
+
+/* 기존 Start7/Start8 폼 그리드 호환 */
+.container-doublegrid{ display:block; background:transparent; }
+.container-double-row{
+  display:grid; grid-template-columns: 180px 1fr; gap:10px;
+  align-items:flex-start; /* 중복 선언 제거 — 의도 확정 */
+  padding:6px 0;
+}
+.container-doubleleft{ color:var(--text-dim); padding-top:6px; }
+.container-doubleright{ min-height:32px; }
+
+/* 1열 형태 */
+.container-first-row{
+  display:grid; grid-template-columns: 180px 1fr; gap:10px;
+  align-items:flex-start; padding:6px 0;
+}
+.container-left{ color:var(--text-dim); padding-top:6px; }
+.container-right{ min-height:32px; }
+
+/* 슬라이더 묶음 */
+.slider-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.container-doubleslider input[type="range"]{ width:100%; }
+
+/* ================================================================
+   시간표 디자인 커스텀
+   ================================================================ */
+
+/* --- 1. 전체 시간표 테이블 스타일 --- */
+.timetable table {
+  width: 100%;
+  /* ✅ table-layout: fixed; 로 모든 요일 열의 너비를 동일하게 고정합니다. */
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #D5E3DE; /* 테두리 색상도 통일 */
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* --- 2. 헤더 (요일, 교시) 스타일 --- */
+.timetable th {
+  /* ✅ 제목 행렬의 배경색을 #D5E3DE로 변경합니다. */
+  background-color: #D5E3DE;
+  font-weight: 600;
+  padding: 10px 4px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-size: 0.9em;
+}
+
+/* --- 3. 열 너비 지정 --- */
+/* 첫 번째 열(교시)의 너비를 13%로 설정해 더 좁게 만듭니다. */
+.timetable th.corner {
+  width: 13%;
+}
+/* 요일 열은 table-layout: fixed 속성에 의해 나머지 공간을 자동으로 균등하게 나눠 가집니다. */
+
+
+/* --- 4. 요일별 색상 변경 --- */
+.timetable thead th.day-col:nth-child(2) {
+  color: #e53935; /* Sunday */
+}
+
+.timetable thead th.day-col:nth-child(8) {
+  color: #1e88e5; /* Saturday */
+}
+
+/* --- 5. 시간표 칸(셀) 및 과목 블록 스타일 --- */
+.timetable td {
+  /* ✅ 시간표 칸의 배경색을 #F8F6E4로 변경합니다. */
+  background-color: #F8F6E4;
+  padding: 3px;
+  border-right: 1px solid #e0e0e0; /* 칸 구분선 색상 */
+  border-top: 1px solid #e0e0e0;
+  vertical-align: top;
+  height: 65px;
+}
+.timetable td:last-child {
+  border-right: none;
+}
+
+/* 과목 블록 자체 스타일 */
+.course-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #aa853f;
+  color: #fff;
+  padding: 4px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  font-weight: 500;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden; /* 블록 내부 내용이 길어지면 숨김 처리 */
+}
+
+/* --- 6. 과목별 색상 --- */
+/* 이 부분은 기존과 동일하게 유지됩니다. */
+.timetable .conflict{ background-color: var(--danger, #dc3545) !important; color: #fff !important; }
+.timetable .course-AR1, .timetable .course-AR2, .timetable .course-AR3, .timetable .course-AR4{ background-color: var(--course-arts, #ffc107); color: #fff; }
+.timetable .course-LI1, .timetable .course-LI2, .timetable .course-LI3, .timetable .course-LI4{ background-color: var(--course-life, #28a745); color: #fff; }
+.timetable .course-SO1, .timetable .course-SO2, .timetable .course-SO3, .timetable .course-SO4{ background-color: var(--course-social, #17a2b8); color: #fff; }
+.timetable .course-MA1, .timetable .course-MA2, .timetable .course-MA3, .timetable .course-MA4{ background-color: var(--course-major, #6f42c1); color: #fff; }
+/* --- 7) Nav bar (상하 내비) -------------------------------------------- */
+.nav-section{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin-top:12px;
+}
+.nav-left, .nav-right{ display:flex; gap:8px; align-items:center; }
+.nav-center .box{ height:1px; width:100%; background:var(--brd); opacity:.5; }
+
+/* --- 8) Certificates (Start7-enroll, 가벼운 디폴트) -------------------- */
+.cert{ background:var(--surface-2); border:1px solid var(--paper-brd); border-radius:12px; padding:14px; }
+.cert-head{ text-align:center; margin-bottom:10px; }
+.cert-school{ font-weight:700; letter-spacing:.3px; }
+.cert-main{ font-size:1.5em; font-weight:700; margin-top:4px; }
+.cert-serial{ color:var(--text-dim); text-align: left; justify-self: start;}
+.cert-kv{ display:grid; grid-template-columns:140px 1fr; column-gap:10px; row-gap:6px; margin:10px 0; }
+.cert-kv dt{ color:var(--text-dim); }
+.cert-kv dd{ margin:0; }
+.cert-foot{ margin-top:12px; }
+.cert-sign-row{ display:flex; justify-content:space-between; }
+.cert-sign-left { font-weight: 600; font-size: 1.4rem; }
+.cert-sign-right { font-weight: 700; font-size: 1.5rem; }
+.cert-major .major-chooser {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 10px;
+    background-color: #303030;
+    color: #fff;
+}
+/* --- 9) Misc ------------------------------------------------------------ */
+.timetable-display h2,
+.course-selection h2{ margin:.6rem 0 .4rem; }
+
+/* 링크 버튼의 기본 호버 대비 (fallback for older browsers w/o color-mix) */
+.btn--brand{ border-color: var(--brand); }
+.btn--accent{ border-color: var(--accent); }
+/* 비활성 버튼 보더 fallback */
+.btn.is-disabled{ border-color: var(--muted); }
+
+/* --- 5) Form Layout: Double / First rows (simple flex) ------------------ */
+/* Start7의 신체 특성 선택 레이아웃 전용: container-xxxxx 계열 */
+
+/* 바깥 래퍼 */
+.container-doublegrid{
+  display:flex;
+  flex-wrap:wrap;               /* 좁아지면 다음 줄로 */
+  gap:0;                        /* 행 간격 없음 */
+}
+
+/* 두 칸짜리 행 */
+.container-double-row{
+  display:flex;
+  align-items:flex-start;       /* 상단 정렬 */
+  justify-content:flex-start;   /* ✅ 양끝 간격 제거 (was space-between) */
+  gap:0;                        /* 칸 사이 간격 없음 */
+  padding:1px;                  /* 필요 없으면 0으로 */
+  box-sizing:border-box;
+  flex:1 1 50%;                 /* 기본 2열 */
+  min-width:320px;              /* 너무 좁으면 한 줄로 */
+}
+
+/* 왼쪽(23%) */
+.container-doubleleft{
+  flex:0 0 23%;
+  box-sizing:border-box;        /* ✅ 테두리/패딩 포함 */
+  padding:4px;
+  padding-top:8px;
+  color:var(--text-dim);
+}
+
+/* 오른쪽(77%) */
+.container-doubleright{
+  flex:1 0 77%;
+  box-sizing:border-box;        /* ✅ 테두리/패딩 포함 */
+  padding:10px;
+  border-radius:10px;
+  background:var(--panel-bg);
+  min-height:32px;
+}
+
+/* 1열 단일 행 */
+.container-first-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-start;   /* ✅ 간격 제거 */
+  gap:0;
+  padding:1px;                  /* 필요 없으면 0으로 */
+  box-sizing:border-box;
+}
+
+/* 1열: 좌(11%) */
+.container-left{
+  flex:0 0 12%;
+  box-sizing:border-box;        /* ✅ 테두리/패딩 포함 */
+  padding:4px;
+  padding-top:8px;
+  color:var(--text-dim);
+}
+
+/* 1열: 우(89%) */
+.container-right{
+  flex:1 0 88%;
+  box-sizing:border-box;        /* ✅ 테두리/패딩 포함 */
+  padding:10px;
+  border-radius:10px;
+  background:var(--panel-bg);
+  min-height:32px;
+}
+
+/* 슬라이더 공용 */
+.slider-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:6px;
+}
+.slider-label{ font-size:.95em; color:var(--text-dim); }
+
+.container-doubleslider{
+  border-radius:3px;
+  border:1px solid #373421;
+  padding:6px;
+}
+.container-doubleslider input[type="range"]{
+  -webkit-appearance:none;
+  width:95%;
+  margin:0 4px;
+  height:8px;
+  border-radius:5px;
+  outline:none;
+  opacity:.9;
+  transition:opacity .2s;
+  position:relative;
+}
+.container-doubleslider input[type="range"]:hover{ opacity:1; }
+.container-doubleslider input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:15px; height:25px; margin-top:-8px;
+  border-radius:10%;
+  background:#948C75; cursor:pointer; border:1px solid #D5DED9;
+}
+.container-doubleslider input[type="range"]::-moz-range-thumb{
+  width:15px; height:25px;
+  border-radius:10%;
+  background:#948C75; cursor:pointer; border:1px solid #D5DED9;
+}
+
+/* 반응형: 매우 좁은 화면에서 1열 */
+@media (max-width: 720px){
+  .container-double-row{ flex:1 1 100%; min-width:0; }
+  .container-doubleleft{ flex-basis:28%; }
+  .container-doubleright{ flex-basis:72%; }
+  .container-left{ flex-basis:22%; }
+  .container-right{ flex-basis:78%; }
+}
+
