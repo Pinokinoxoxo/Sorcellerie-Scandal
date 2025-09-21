@@ -3805,46 +3805,73 @@ $(document).on('click', '.js-toggle-course', function (ev) {
             &lt;&lt;/button&gt;&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="34" name="Inventory" tags="noevent, util, dialog, nobr" position="475,475" size="100,100"></tw-passagedata><tw-passagedata pid="35" name="M:DormFront" tags="M OUTSIDE" position="600,475" size="100,100">/* 남자 기숙사 건물 앞 */
-&lt;&lt;set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())&gt;&gt;
-
-&lt;&lt;if previous() === &quot;F:DormFront&quot;&gt;&gt;
-당신은 남자 기숙사 건물 앞에 도착했다.
-&lt;&lt;elseif _fromInside&gt;&gt;
+&lt;&lt;/nobr&gt;&gt;</tw-passagedata><tw-passagedata pid="34" name="Inventory" tags="noevent, util, dialog, nobr" position="475,475" size="100,100"></tw-passagedata><tw-passagedata pid="35" name="M:DormFront" tags="M OUTSIDE" position="600,475" size="100,100">&lt;&lt;nobr&gt;&gt;/* 남자 기숙사 건물 앞 */
+&lt;&lt;set _prev = previous()&gt;&gt;
+/* 기숙사 &#39;내부&#39;에서 나온 경우를 정규식으로 판정 */
+&lt;&lt;set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(_prev)&gt;&gt;
+/* 외부(산책로/학생회관/강의실/기타)에서 온 경우: 내부가 아니고, 도착지 자체가 아니면 외부로 간주 */
+&lt;&lt;set _fromExternal = !_fromInside &amp;&amp; _prev !== &quot;M:DormFront&quot; &amp;&amp; _prev !== &quot;F:DormFront&quot;&gt;&gt;
+&lt;&lt;if _fromInside&gt;&gt;
+	&lt;&lt;if $homeDorm === &quot;M&quot;&gt;&gt;
+당신은 기숙사 밖으로 나왔다.
+	&lt;&lt;else&gt;&gt;
 당신은 남자 기숙사 밖으로 나왔다.
+	&lt;&lt;/if&gt;&gt;
+&lt;&lt;elseif _prev === &quot;F:DormFront&quot; || _fromExternal&gt;&gt;
+당신은 남자 기숙사 건물 앞에 도착했다.
 &lt;&lt;else&gt;&gt;
 당신은 남자 기숙사 건물 앞에 서 있다.
-&lt;&lt;/if&gt;&gt;
+&lt;&lt;/if&gt;&gt;&lt;&lt;/nobr&gt;&gt;
+석재 외벽으로 이루어진 2층짜리 기숙사 건물은 담쟁이가 벽을 반쯤 덮고 있었고, 정문의 오래된 구리손잡이는 세월의 흐름을 보여주는 듯 반들반들하게 빛나고 있다. 아치형의 정문 위엔 소르셀리 휘장이 새겨져있다. 
+
+정문 옆에는  ‘통금 24:00 - 05:00’ 라고 적힌 안내판이 걸려 있다.
+
+근처에 있는 여자 기숙사 건물 사이에는 나무와 관목이 무성하게 심어진 산책로가 있다.
 
 - [[남자 기숙사로 들어간다-&gt;M:CommonRoom]]
-- [[여자 기숙사 앞으로 간다-&gt;F:DormFront]]</tw-passagedata><tw-passagedata pid="36" name="F:DormFront" tags="F OUTSIDE" position="725,475" size="100,100">/* 여자 기숙사 건물 앞 */
-&lt;&lt;set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())&gt;&gt;
+- [[산책로로 향한다-&gt;DormPathway]]</tw-passagedata><tw-passagedata pid="36" name="F:DormFront" tags="F OUTSIDE" position="725,475" size="100,100">&lt;&lt;nobr&gt;&gt;/* 여자 기숙사 건물 앞 */
+&lt;&lt;set _prev = previous()&gt;&gt;
+&lt;&lt;set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(_prev)&gt;&gt;
+&lt;&lt;set _fromExternal = !_fromInside &amp;&amp; _prev !== &quot;M:DormFront&quot; &amp;&amp; _prev !== &quot;F:DormFront&quot;&gt;&gt;
 
-&lt;&lt;if previous() === &quot;M:DormFront&quot;&gt;&gt;
-당신은 여자 기숙사 건물 앞에 도착했다.
-&lt;&lt;elseif _fromInside&gt;&gt;
-	&lt;&lt;if $homeDorm === &quot;M&quot;&gt;&gt;
-당신은 여자 기숙사 밖으로 나왔다.
-	&lt;&lt;else&gt;&gt;
+&lt;&lt;if _fromInside&gt;&gt;
+	&lt;&lt;if $homeDorm === &quot;F&quot;&gt;&gt;
 당신은 기숙사 밖으로 나왔다.
+	&lt;&lt;else&gt;&gt;
+당신은 여자 기숙사 밖으로 나왔다.
 	&lt;&lt;/if&gt;&gt;
+&lt;&lt;elseif _prev === &quot;M:DormFront&quot; || _fromExternal&gt;&gt;
+당신은 여자 기숙사 건물 앞에 도착했다.
 &lt;&lt;else&gt;&gt;
 당신은 여자 기숙사 건물 앞에 서 있다.
-&lt;&lt;/if&gt;&gt;
-
+&lt;&lt;/if&gt;&gt;&lt;&lt;/nobr&gt;&gt;
+석재 외벽으로 이루어진 2층짜리 기숙사 건물은 담쟁이가 벽을 반쯤 덮고 있었고, 정문의 오래된 구리손잡이는 세월의 흐름을 보여주는 듯 반들반들하게 빛나고 있다. 아치형의 정문 위엔 소르셀리 휘장이 새겨져있다. 
 - [[여자 기숙사로 들어간다-&gt;F:CommonRoom]]
-- [[남자 기숙사 앞으로 간다-&gt;M:DormFront]]
+- [[산책로로 향한다-&gt;DormPathway]]</tw-passagedata><tw-passagedata pid="37" name="DormPathway" tags="OUTSIDE" position="850,475" size="100,100">당신은 기숙사 건물 사이에 있는 넓은 산책로로 이동했다.
+
+나무와 관목이 군데군데 심어진 좁은 길과 잔디 정원이 꾸며진 넓은 산책로다.
+
+&lt;&lt;nobr&gt;&gt;&lt;&lt;if previous() === &quot;M:DormFront&quot;&gt;&gt;
+- [[남자 기숙사로 되돌아간다-&gt;M:DormFront]]
+&lt;&lt;elseif previous() === &quot;F:DormFront&quot;&gt;&gt;
+- [[여자 기숙사로 되돌아간다-&gt;F:DormFront]]
+&lt;&lt;/if&gt;&gt;&lt;&lt;/nobr&gt;&gt;
+&lt;&lt;nobr&gt;&gt;&lt;&lt;if previous()previous() === &quot;F:DormFront&quot;&gt;&gt;
+- [[남자 기숙사 방향으로 걸어간다-&gt;M:DormFront]]
+&lt;&lt;elseif previous() === &quot;M:DormFront&quot;&gt;&gt;
+- [[여자 기숙사 방향으로 걸어간다-&gt;F:DormFront]]
+&lt;&lt;/if&gt;&gt;&lt;&lt;/nobr&gt;&gt;
 
 /* ─────────────────────────────
    남자 기숙사 내부
-   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="37" name="M:CommonRoom" tags="M FLOOR:1" position="850,475" size="100,100">남자 기숙사 라운지다.
+   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="38" name="M:CommonRoom" tags="M FLOOR:1" position="975,475" size="100,100">남자 기숙사 라운지다.
 &lt;&lt;if previous() is &quot;M:DormFront&quot;&gt;&gt;문을 밀고 안으로 들어왔다.&lt;&lt;/if&gt;&gt;
 
 벽난로와 편한 의자들이 보인다. 책장이 한쪽 벽을 채우고 있다.
 - [[책장-&gt;Bookshelf]]
 - [[1층 복도-&gt;M:Corridor1]]
 - [[2층 복도-&gt;M:Corridor2]]
-- [[기숙사 밖으로 나간다-&gt;M:DormFront]]</tw-passagedata><tw-passagedata pid="38" name="M:Corridor1" tags="M FLOOR:1" position="975,475" size="100,100">&lt;&lt;if previous() is &quot;M:CommonRoom&quot;&gt;&gt;
+- [[기숙사 밖으로 나간다-&gt;M:DormFront]]</tw-passagedata><tw-passagedata pid="39" name="M:Corridor1" tags="M FLOOR:1" position="1100,475" size="100,100">&lt;&lt;if previous() is &quot;M:CommonRoom&quot;&gt;&gt;
 라운지에서 1층 복도로 내려왔다.
 &lt;&lt;else&gt;&gt;
 남자 기숙사 1층 복도다.
@@ -3857,35 +3884,35 @@ $(document).on('click', '.js-toggle-course', function (ev) {
 /* 내 방 링크: 내 홈이 남자기숙사 + 1층 복도일 때만 노출 */
 &lt;&lt;if $homeDorm is &quot;M&quot;&gt;&gt;
 - [[당신의 방-&gt;PlayerDorm]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="39" name="M:Corridor2" tags="M FLOOR:2" position="1100,475" size="100,100">남자 기숙사 2층 복도다.
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="40" name="M:Corridor2" tags="M FLOOR:2" position="1225,475" size="100,100">남자 기숙사 2층 복도다.
 - [[화장실-&gt;M:Restroom2]]
 - [[세면장-&gt;M:Washroom2]]
-- [[라운지-&gt;M:CommonRoom]]</tw-passagedata><tw-passagedata pid="40" name="M:Restroom1" tags="M FLOOR:1" position="1225,475" size="100,100">남자 기숙사 1층 화장실이다.
-- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="41" name="M:Restroom2" tags="M FLOOR:2" position="100,600" size="100,100">남자 기숙사 2층 화장실이다.
-- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="42" name="M:Washroom1" tags="M FLOOR:1" position="225,600" size="100,100">남자 기숙사 1층 세면장이다.
+- [[라운지-&gt;M:CommonRoom]]</tw-passagedata><tw-passagedata pid="41" name="M:Restroom1" tags="M FLOOR:1" position="100,600" size="100,100">남자 기숙사 1층 화장실이다.
+- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="42" name="M:Restroom2" tags="M FLOOR:2" position="225,600" size="100,100">남자 기숙사 2층 화장실이다.
+- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="43" name="M:Washroom1" tags="M FLOOR:1" position="350,600" size="100,100">남자 기숙사 1층 세면장이다.
 - [[탈의실-&gt;M:Changing1]]
-- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="43" name="M:Changing1" tags="M FLOOR:1" position="350,600" size="100,100">남자 기숙사 1층 탈의실이다.
+- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="44" name="M:Changing1" tags="M FLOOR:1" position="475,600" size="100,100">남자 기숙사 1층 탈의실이다.
 - [[샤워장-&gt;M:Shower1]]
-- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="44" name="M:Shower1" tags="M FLOOR:1" position="475,600" size="100,100">남자 기숙사 1층 샤워장이다.
+- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="45" name="M:Shower1" tags="M FLOOR:1" position="600,600" size="100,100">남자 기숙사 1층 샤워장이다.
 - [[탈의실로 돌아간다-&gt;M:Changing1]]
-- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="45" name="M:Washroom2" tags="M FLOOR:2" position="600,600" size="100,100">남자 기숙사 2층 세면장이다.
+- [[복도로 나간다-&gt;M:Corridor1]]</tw-passagedata><tw-passagedata pid="46" name="M:Washroom2" tags="M FLOOR:2" position="725,600" size="100,100">남자 기숙사 2층 세면장이다.
 - [[탈의실-&gt;M:Changing2]]
-- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="46" name="M:Changing2" tags="M FLOOR:2" position="725,600" size="100,100">남자 기숙사 2층 탈의실이다.
+- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="47" name="M:Changing2" tags="M FLOOR:2" position="850,600" size="100,100">남자 기숙사 2층 탈의실이다.
 - [[샤워장-&gt;M:Shower2]]
-- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="47" name="M:Shower2" tags="M FLOOR:2" position="850,600" size="100,100">남자 기숙사 2층 샤워장이다.
+- [[복도로 나간다-&gt;M:Corridor2]]</tw-passagedata><tw-passagedata pid="48" name="M:Shower2" tags="M FLOOR:2" position="975,600" size="100,100">남자 기숙사 2층 샤워장이다.
 - [[탈의실로 돌아간다-&gt;M:Changing2]]
 - [[복도로 나간다-&gt;M:Corridor2]]
 
 /* ─────────────────────────────
    여자 기숙사 내부
-   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="48" name="F:CommonRoom" tags="F FLOOR:1" position="975,600" size="100,100">여자 기숙사 라운지다.
+   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="49" name="F:CommonRoom" tags="F FLOOR:1" position="1100,600" size="100,100">여자 기숙사 라운지다.
 &lt;&lt;if previous() is &quot;F:FroDormFrontnt&quot;&gt;&gt;문을 밀고 안으로 들어왔다.&lt;&lt;/if&gt;&gt;
 
 벽난로와 편한 의자들이 보인다. 책장이 한쪽 벽을 채우고 있다.
 - [[책장-&gt;Bookshelf]]
 - [[1층 복도-&gt;F:Corridor1]]
 - [[2층 복도-&gt;F:Corridor2]]
-- [[기숙사 밖으로 나간다-&gt;F:DormFront]]</tw-passagedata><tw-passagedata pid="49" name="F:Corridor1" tags="F FLOOR:1" position="1100,600" size="100,100">&lt;&lt;if previous() is &quot;F:CommonRoom&quot;&gt;&gt;
+- [[기숙사 밖으로 나간다-&gt;F:DormFront]]</tw-passagedata><tw-passagedata pid="50" name="F:Corridor1" tags="F FLOOR:1" position="1225,600" size="100,100">&lt;&lt;if previous() is &quot;F:CommonRoom&quot;&gt;&gt;
 라운지에서 1층 복도로 내려왔다.
 &lt;&lt;else&gt;&gt;
 여자 기숙사 1층 복도다.
@@ -3898,34 +3925,34 @@ $(document).on('click', '.js-toggle-course', function (ev) {
 /* 내 방 링크: 내 홈이 여자기숙사 + 1층 복도일 때만 노출 */
 &lt;&lt;if $homeDorm is &quot;F&quot;&gt;&gt;
 - [[당신의 방-&gt;PlayerRoom]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="50" name="F:Corridor2" tags="F FLOOR:2" position="1225,600" size="100,100">여자 기숙사 2층 복도다.
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="51" name="F:Corridor2" tags="F FLOOR:2" position="100,725" size="100,100">여자 기숙사 2층 복도다.
 - [[화장실-&gt;F:Restroom2]]
 - [[세면장-&gt;F:Washroom2]]
-- [[라운지-&gt;F:CommonRoom]]</tw-passagedata><tw-passagedata pid="51" name="F:Restroom1" tags="F FLOOR:1" position="100,725" size="100,100">여자 기숙사 1층 화장실이다.
-- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="52" name="F:Restroom2" tags="F FLOOR:2" position="225,725" size="100,100">여자 기숙사 2층 화장실이다.
-- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="53" name="F:Washroom1" tags="F FLOOR:1" position="350,725" size="100,100">여자 기숙사 1층 세면장이다.
+- [[라운지-&gt;F:CommonRoom]]</tw-passagedata><tw-passagedata pid="52" name="F:Restroom1" tags="F FLOOR:1" position="225,725" size="100,100">여자 기숙사 1층 화장실이다.
+- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="53" name="F:Restroom2" tags="F FLOOR:2" position="350,725" size="100,100">여자 기숙사 2층 화장실이다.
+- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="54" name="F:Washroom1" tags="F FLOOR:1" position="475,725" size="100,100">여자 기숙사 1층 세면장이다.
 - [[탈의실-&gt;F:Changing1]]
-- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="54" name="F:Changing1" tags="F FLOOR:1" position="475,725" size="100,100">여자 기숙사 1층 탈의실이다.
+- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="55" name="F:Changing1" tags="F FLOOR:1" position="600,725" size="100,100">여자 기숙사 1층 탈의실이다.
 - [[샤워장-&gt;F:Shower1]]
-- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="55" name="F:Shower1" tags="F FLOOR:1" position="600,725" size="100,100">여자 기숙사 1층 샤워장이다.
+- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="56" name="F:Shower1" tags="F FLOOR:1" position="725,725" size="100,100">여자 기숙사 1층 샤워장이다.
 - [[탈의실로 돌아간다-&gt;F:Changing1]]
-- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="56" name="F:Washroom2" tags="F FLOOR:2" position="725,725" size="100,100">여자 기숙사 2층 세면장이다.
+- [[복도로 나간다-&gt;F:Corridor1]]</tw-passagedata><tw-passagedata pid="57" name="F:Washroom2" tags="F FLOOR:2" position="850,725" size="100,100">여자 기숙사 2층 세면장이다.
 - [[탈의실-&gt;F:Changing2]]
-- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="57" name="F:Changing2" tags="F FLOOR:2" position="850,725" size="100,100">여자 기숙사 2층 탈의실이다.
+- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="58" name="F:Changing2" tags="F FLOOR:2" position="975,725" size="100,100">여자 기숙사 2층 탈의실이다.
 - [[샤워장-&gt;F:Shower2]]
-- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="58" name="F:Shower2" tags="F FLOOR:2" position="975,725" size="100,100">여자 기숙사 2층 샤워장이다.
+- [[복도로 나간다-&gt;F:Corridor2]]</tw-passagedata><tw-passagedata pid="59" name="F:Shower2" tags="F FLOOR:2" position="1100,725" size="100,100">여자 기숙사 2층 샤워장이다.
 - [[탈의실로 돌아간다-&gt;F:Changing2]]
 - [[복도로 나간다-&gt;F:Corridor2]]
 
 /* ─────────────────────────────
    공용: 책장, 플레이어 방, 침대
-   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="59" name="Bookshelf" tags="" position="1100,725" size="100,100">여러 장르의 책들이 꽂혀 있다.
+   ───────────────────────────── */</tw-passagedata><tw-passagedata pid="60" name="Bookshelf" tags="" position="1225,725" size="100,100">여러 장르의 책들이 꽂혀 있다.
 &lt;&lt;if previous() matches &quot;M:CommonRoom|F:CommonRoom&quot;&gt;&gt;
 - [[라운지로 돌아간다-&gt;%+previous()]]
 &lt;&lt;else&gt;&gt;
 - [[뒤로-&gt;M:CommonRoom]]
 - [[뒤로-&gt;F:CommonRoom]]
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="60" name="PlayerRoom" tags="HOME FLOOR:1" position="1225,725" size="100,100">/* 동적 목적지: 내 홈 기숙사 1층 복도 */
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="61" name="PlayerRoom" tags="HOME FLOOR:1" position="100,850" size="100,100">/* 동적 목적지: 내 홈 기숙사 1층 복도 */
 &lt;&lt;set _homeCorr = ($homeDorm is &quot;M&quot;) ? &quot;M:Corridor1&quot; : &quot;F:Corridor1&quot;&gt;&gt;
 
 /* 가드: 바로 이전이 내 홈 기숙사 1층 복도에서 온 경우만 정상 입장 */
@@ -3944,7 +3971,7 @@ $(document).on('click', '.js-toggle-course', function (ev) {
 &lt;&lt;else&gt;&gt;
 이 건물에는 당신의 방이 없다.
 - &lt;&lt;link &quot;돌아가기&quot;&gt;&gt;&lt;&lt;goto previous()&gt;&gt;&lt;&lt;/link&gt;&gt;
-&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="61" name="OnBed" tags="" position="100,850" size="100,100">당신은 지금 침대 위에 누워 있다.
+&lt;&lt;/if&gt;&gt;</tw-passagedata><tw-passagedata pid="62" name="OnBed" tags="" position="225,850" size="100,100">당신은 지금 침대 위에 누워 있다.
 - [[일어나기-&gt;PlayerRoom]]</tw-passagedata></tw-storydata>
 	<script id="script-sugarcube" type="text/javascript">
 	/*! SugarCube JS */

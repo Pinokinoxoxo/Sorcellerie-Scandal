@@ -4,5 +4,10 @@ Scandal Sorcellerie
 :: StoryTitle
 Scandal Sorcellerie
 
+:: StoryData
+{
+    "ifid": "A3ED54A2-6A8D-40CA-A649-845A2EBE03CF"
+}
+
 :: StoryBanner [nobr, noevent]
 <div id="title-container" style="display: inline-block;"><img src="assets/images/logo.png" style="width: 45%; overflow: auto; overflow-clip-margin:"></div>

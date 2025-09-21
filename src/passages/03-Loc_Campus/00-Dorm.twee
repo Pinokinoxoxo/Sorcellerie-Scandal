@@ -1,36 +1,66 @@
 :: M:DormFront [M OUTSIDE]
-/* 남자 기숙사 건물 앞 */
-<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())>>
-
-<<if previous() === "F:DormFront">>
-당신은 남자 기숙사 건물 앞에 도착했다.
-<<elseif _fromInside>>
+<<nobr>>/* 남자 기숙사 건물 앞 */
+<<set _prev = previous()>>
+/* 기숙사 '내부'에서 나온 경우를 정규식으로 판정 */
+<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(_prev)>>
+/* 외부(산책로/학생회관/강의실/기타)에서 온 경우: 내부가 아니고, 도착지 자체가 아니면 외부로 간주 */
+<<set _fromExternal = !_fromInside && _prev !== "M:DormFront" && _prev !== "F:DormFront">>
+<<if _fromInside>>
+	<<if $homeDorm === "M">>
+당신은 기숙사 밖으로 나왔다.
+	<<else>>
 당신은 남자 기숙사 밖으로 나왔다.
+	<</if>>
+<<elseif _prev === "F:DormFront" || _fromExternal>>
+당신은 남자 기숙사 건물 앞에 도착했다.
 <<else>>
 당신은 남자 기숙사 건물 앞에 서 있다.
-<</if>>
+<</if>><</nobr>>
+석재 외벽으로 이루어진 2층짜리 기숙사 건물은 담쟁이가 벽을 반쯤 덮고 있었고, 정문의 오래된 구리손잡이는 세월의 흐름을 보여주는 듯 반들반들하게 빛나고 있다. 아치형의 정문 위엔 소르셀리 휘장이 새겨져있다. 
+
+정문 옆에는  ‘통금 24:00 - 05:00’ 라고 적힌 안내판이 걸려 있다.
+
+근처에 있는 여자 기숙사 건물 사이에는 나무와 관목이 무성하게 심어진 산책로가 있다.
 
 - [[남자 기숙사로 들어간다->M:CommonRoom]]
-- [[여자 기숙사 앞으로 간다->F:DormFront]]
+- [[산책로로 향한다->DormPathway]]
 
 :: F:DormFront [F OUTSIDE]
-/* 여자 기숙사 건물 앞 */
-<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(previous())>>
+<<nobr>>/* 여자 기숙사 건물 앞 */
+<<set _prev = previous()>>
+<<set _fromInside = /^(M|F):(CommonRoom|Corridor1|Corridor2|Restroom1|Restroom2|Washroom1|Washroom2|Changing1|Changing2|Shower1|Shower2)$/.test(_prev)>>
+<<set _fromExternal = !_fromInside && _prev !== "M:DormFront" && _prev !== "F:DormFront">>
 
-<<if previous() === "M:DormFront">>
-당신은 여자 기숙사 건물 앞에 도착했다.
-<<elseif _fromInside>>
-	<<if $homeDorm === "M">>
-당신은 여자 기숙사 밖으로 나왔다.
-	<<else>>
+<<if _fromInside>>
+	<<if $homeDorm === "F">>
 당신은 기숙사 밖으로 나왔다.
+	<<else>>
+당신은 여자 기숙사 밖으로 나왔다.
 	<</if>>
+<<elseif _prev === "M:DormFront" || _fromExternal>>
+당신은 여자 기숙사 건물 앞에 도착했다.
 <<else>>
 당신은 여자 기숙사 건물 앞에 서 있다.
-<</if>>
-
+<</if>><</nobr>>
+석재 외벽으로 이루어진 2층짜리 기숙사 건물은 담쟁이가 벽을 반쯤 덮고 있었고, 정문의 오래된 구리손잡이는 세월의 흐름을 보여주는 듯 반들반들하게 빛나고 있다. 아치형의 정문 위엔 소르셀리 휘장이 새겨져있다. 
 - [[여자 기숙사로 들어간다->F:CommonRoom]]
-- [[남자 기숙사 앞으로 간다->M:DormFront]]
+- [[산책로로 향한다->DormPathway]]
+
+:: DormPathway [OUTSIDE]
+당신은 기숙사 건물 사이에 있는 넓은 산책로로 이동했다.
+
+나무와 관목이 군데군데 심어진 좁은 길과 잔디 정원이 꾸며진 넓은 산책로다.
+
+<<nobr>><<if previous() === "M:DormFront">>
+- [[남자 기숙사로 되돌아간다->M:DormFront]]
+<<elseif previous() === "F:DormFront">>
+- [[여자 기숙사로 되돌아간다->F:DormFront]]
+<</if>><</nobr>>
+<<nobr>><<if previous() === "F:DormFront">>
+- [[남자 기숙사 방향으로 걸어간다->M:DormFront]]
+<<elseif previous() === "M:DormFront">>
+- [[여자 기숙사 방향으로 걸어간다->F:DormFront]]
+<</if>><</nobr>>
 
 /* ─────────────────────────────
    남자 기숙사 내부
